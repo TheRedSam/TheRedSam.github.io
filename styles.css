@@ -12,50 +12,64 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: sans-serif;
   line-height: 1.6;
   background: var(--bg-color);
   color: var(--text-color);
   padding: 20px;
 }
 
-header {
+.site-header {
   text-align: center;
   margin-bottom: 2rem;
 }
-
-header h1 {
+.site-header h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.site-header nav button {
+  margin: 0 .5rem;
+  padding: .5rem 1rem;
+  border: 1px solid var(--primary-color);
+  background: white;
   color: var(--primary-color);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.site-header nav button.active {
+  background: var(--primary-color);
+  color: white;
 }
 
-nav ul {
-  list-style: none;
-  display: inline-flex;
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.gallery .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
 }
 
-nav a {
-  text-decoration: none;
-  color: var(--primary-color);
-  font-weight: bold;
+.grid-item {
+  border: 1px solid #ddd;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #fafafa;
 }
-
-main {
-  max-width: 800px;
-  margin: 0 auto 2rem;
+.grid-item img {
+  width: 100%;
+  display: block;
+  transition: transform .3s;
 }
-
-section {
-  margin-bottom: 2rem;
+.grid-item img:hover {
+  transform: scale(1.05);
 }
-
-section h2 {
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
+.caption {
+  padding: .5rem;
 }
-
-footer {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #6a737d;
+.caption h3 {
+  font-size: 1.1rem;
+  margin-bottom: .25rem;
 }
