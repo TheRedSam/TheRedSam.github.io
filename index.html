@@ -1,47 +1,106 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My GitHub Pages Site</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Test Vue Artist Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Vue 3 from CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Welcome to My Site</h1>
-    <nav>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+  <div id="app">
+    <header class="site-header">
+      <h1>Artist Name</h1>
+      <nav>
+        <!-- Generate a button for each tag filter -->
+        <button
+          v-for="tag in allTags"
+          :key="tag"
+          :class="{ active: currentFilter === tag }"
+          @click="currentFilter = tag"
+        >
+          {{ tag }}
+        </button>
+        <!-- A “Clear” to show all -->
+        <button
+          :class="{ active: currentFilter === null }"
+          @click="currentFilter = null"
+        >
+          All
+        </button>
+      </nav>
+    </header>
 
-  <main>
-    <section id="about">
-      <h2>About Me</h2>
-      <p>Hello! I’m a developer learning how to build websites with GitHub Pages.</p>
+    <section class="gallery container">
+      <div class="grid">
+        <!-- Loop through filteredArtworks -->
+        <div
+          v-for="item in filteredArtworks"
+          :key="item.id"
+          class="grid-item"
+        >
+          <img :src="item.src" :alt="item.title">
+          <div class="caption">
+            <h3>{{ item.title }}</h3>
+            <small>Tags: {{ item.tags.join(', ') }}</small>
+          </div>
+        </div>
+        <!-- Show a message if no artwork matches -->
+        <p v-if="filteredArtworks.length === 0">
+          No artwork found for “{{ currentFilter }}”.
+        </p>
+      </div>
     </section>
+  </div>
 
-    <section id="projects">
-      <h2>Projects</h2>
-      <ul>
-        <li><a href="#">Project One</a></li>
-        <li><a href="#">Project Two</a></li>
-        <li><a href="#">Project Three</a></li>
-      </ul>
-    </section>
+  <script>
+    const { createApp } = Vue
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>You can find me on <a href="https://github.com/TheRedSam">GitHub</a>.</p>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Samantha J</p>
-  </footer>
+    createApp({
+      data() {
+        return {
+          currentFilter: null,  // null means “All”
+          artworks: [
+            {
+              id: 1,
+              title: 'Small Samantha',
+              src: 'assets/img/art1.jpg',
+              tags: ['photo', 'cans']
+            },
+            {
+              id: 2,
+              title: 'Almost Samantha',
+              src: 'assets/img/art2.jpg',
+              tags: ['photo', 'face']
+            },
+            {
+              id: 3,
+              title: 'Samantha',
+              src: 'assets/img/art3.jpg',
+              tags: ['photo', 'profile pic']
+            }
+            // add more items here...
+          ]
+        }
+      },
+      computed: {
+        allTags() {
+          // Flatten all tags, dedupe, and sort
+          const set = new Set()
+          this.artworks.forEach(a => a.tags.forEach(t => set.add(t)))
+          return Array.from(set).sort()
+        },
+        filteredArtworks() {
+          if (!this.currentFilter) {
+            return this.artworks
+          }
+          return this.artworks.filter(a =>
+            a.tags.includes(this.currentFilter)
+          )
+        }
+      }
+    }).mount('#app')
+  </script>
 </body>
 </html>
